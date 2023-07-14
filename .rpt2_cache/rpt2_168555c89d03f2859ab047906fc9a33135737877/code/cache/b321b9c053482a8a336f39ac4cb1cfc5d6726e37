@@ -1,1 +1,0 @@
-{"code":"import { B, yan } from './test';\r\nimport yan2 from './test';\r\nconsole.log(yan);\r\nconsole.log(yan2);\r\nvar a = 1 + 2;\r\nvar b = a;\r\nconsole.log(a);\r\nconsole.log(b);\r\nconsole.log(B);\r\nexport function greeter(person) {\r\n    return 'Hello, ' + person;\r\n}\r\nexport var name = 'base';\r\n"}
