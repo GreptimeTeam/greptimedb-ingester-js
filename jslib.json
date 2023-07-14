@@ -1,0 +1,11 @@
+{
+    "name": "greptime-js-sdk",
+    "npmname": "greptime-js-sdk",
+    "umdname": "greptime-js-sdk",
+    "username": "alili",
+    "type": "ts",
+    "module": "umd,esm,commonjs",
+    "test": "mocha",
+    "lang": "en",
+    "version": "1.6.0"
+}
