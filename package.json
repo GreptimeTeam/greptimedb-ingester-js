@@ -17,7 +17,10 @@
     "build:aio": "rollup -c config/rollup.config.aio.js",
     "build:aio.min": "cross-env NODE_ENV=production npm run build:aio",
     "build": "npm run clean && npm run build:self && npm run build:esm && npm run build:aio && npm run build:aio.min",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "docs:dev": "vitepress dev doc",
+    "docs:build": "vitepress build doc",
+    "docs:preview": "vitepress preview doc"
   },
   "author": "alili",
   "license": "MIT",
@@ -57,7 +60,8 @@
     "source-map-support": "0.5.9",
     "ts-node": "7.0.1",
     "tslib": "1.9.3",
-    "typescript": "3.3.3333"
+    "typescript": "3.3.3333",
+    "vitepress": "1.0.0-beta.5"
   },
   "dependencies": {
     "axios": "^1.4.0",

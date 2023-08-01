@@ -1,3 +1,5 @@
+import { formatResult } from './utils'
+
 import axios, { AxiosRequestConfig } from 'axios'
 const dayjs = require('dayjs')
 
@@ -46,8 +48,7 @@ const promQL = function (db) {
     } as AxiosRequestConfig)
 
     return {
-      ...this.formatResult(res),
-
+      ...formatResult(res),
       promQL: this.args,
     }
   }
