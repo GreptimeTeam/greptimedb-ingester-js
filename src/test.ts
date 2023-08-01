@@ -28,7 +28,7 @@ import Greptime from './index'
   const promQLDemo = async () => {
     try {
       let res = await promQL.query('apm').duration('1m').run()
-      console.log(`res:`, res)
+      console.log(`res:`, res.data)
     } catch (error) {
       console.log(`error:`, error)
     }
@@ -50,14 +50,14 @@ import Greptime from './index'
     console.log(`res:`, res.data.output[0])
   }
 
-  createTable('demo', {
-    timeIndex: 'ts',
-    tags: ['test'],
-    fileds: ['data', { startTime: 'date' }],
-  })
-  getDesc('test2')
-  getTimeIndex('test')
-  sqlDemo()
+  //   createTable('demo', {
+  //     timeIndex: 'ts',
+  //     tags: ['test'],
+  //     fileds: ['data', { startTime: 'date' }],
+  //   })
+  //   getDesc('test2')
+  //   getTimeIndex('test')
+  //   sqlDemo()
   promQLDemo()
 
   //

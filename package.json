@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "jsnext:main": "dist/index.esm.js",
   "module": "dist/index.esm.js",
+  "type": "commonjs",
   "sideEffects": false,
   "scripts": {
     "clean": "rimraf ./dist",

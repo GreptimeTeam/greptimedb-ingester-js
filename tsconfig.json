@@ -3,6 +3,10 @@
     "target": "es2017",
     "module": "commonjs"
   },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "**.d.ts"]
 }
