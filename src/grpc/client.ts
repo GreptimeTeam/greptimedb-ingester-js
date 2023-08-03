@@ -4,21 +4,22 @@ const target = '127.0.0.1:4001'
 
 function main() {
   console.log('client start!')
-  var client = new greptime_v1.GreptimeDatabase(target, grpc.credentials.createInsecure())
+  var client = new greptime_v1.PrometheusGateway(target, grpc.credentials.createInsecure())
+  console.log('client start!')
   client.Handle(
     {
       header: {
-        catalog: 'gan',
-        schema: 'Time',
         authorization: {
-          token: 'token',
+          basic: {
+            username: '',
+            password: '',
+          },
         },
-        dbname: '',
+        dbname: 'public',
       },
-      request: {
-        query: {
-          sql: '',
-        },
+      instant_query: {
+        query: 'scripts',
+        time: '10',
       },
     },
     function (err, response) {

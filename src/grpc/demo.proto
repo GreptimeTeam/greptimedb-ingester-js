@@ -17,6 +17,27 @@ service GreptimeDatabase {
   rpc HandleRequests(stream GreptimeRequest) returns (GreptimeResponse);
 }
 
+service PrometheusGateway {
+  rpc Handle(PromqlRequest) returns (PromqlResponse);
+}
+message PromqlRequest {
+  RequestHeader header = 1;
+  oneof promql {
+    PromInstantQuery instant_query = 2;
+    PromRangeQuery range_query = 3;
+  }
+}
+
+message PromqlResponse {
+  ResponseHeader header = 1;
+  bytes body = 2; // absolutely same format as Prometheus in JSON
+}
+
+message PromInstantQuery {
+  string query = 1;
+  string time = 2;
+}
+
 message GreptimeRequest {
   RequestHeader header = 1;
   oneof request {
