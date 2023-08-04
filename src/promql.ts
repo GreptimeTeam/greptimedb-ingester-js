@@ -1,39 +1,44 @@
 import { formatResult } from './utils'
-
 import axios, { AxiosRequestConfig } from 'axios'
-const dayjs = require('dayjs')
+import { PromQLArgs } from './type/promql'
 
-const promQL = function (db) {
-  this.url = '/v1/promql'
-  this.args = {
-    query: '',
-    start: dayjs().subtract(5, 'm').unix(),
-    end: dayjs().unix(),
-    step: 1,
-    db,
+const dayjs = require('dayjs')
+class PromQL {
+  url: string
+  args: PromQLArgs
+
+  constructor(db: string) {
+    this.url = '/v1/promql'
+    this.args = {
+      query: '',
+      start: dayjs().subtract(5, 'm').unix(),
+      end: dayjs().unix(),
+      step: 1,
+      db,
+    }
   }
 
-  this.query = (query) => {
+  query = (query: string) => {
     this.args.query = query
     return this
   }
 
-  this.start = (ts) => {
+  start = (ts: string) => {
     this.args.start = dayjs(ts).unix()
     return this
   }
 
-  this.end = (ts) => {
+  end = (ts: string) => {
     this.args.end = dayjs(ts).unix()
     return this
   }
 
-  this.step = (step) => {
+  step = (step: number) => {
     this.args.step = step
     return this
   }
 
-  this.duration = (duration = '5m') => {
+  duration = (duration: string = '5m') => {
     const [time, unit] = duration.split(/(?<=\d)(?=[a-zA-Z])/)
 
     this.args.start = dayjs().subtract(time, unit).unix()
@@ -42,7 +47,8 @@ const promQL = function (db) {
     return this
   }
 
-  this.run = async () => {
+  run = async () => {
+    // TODO type
     let res: any = await axios.post(this.url, {}, {
       params: this.args,
     } as AxiosRequestConfig)
@@ -54,4 +60,4 @@ const promQL = function (db) {
   }
 }
 
-export default promQL
+export default PromQL

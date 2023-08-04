@@ -1,16 +1,10 @@
 // const Greptime = require("greptime");
 import Greptime from './index'
 ;(async () => {
-  let { sql, promQL } = Greptime({
-    host: 'https://tgizxkvz3glp.test-ap-southeast-1.aws.greptime.cloud',
-    dbName: 'yzz3c2zsm6dnnemo_test-public',
-    username: '8ZJ8BUM2UCYLp5Wh8e5cFM3z',
-    password: 'iqvruVoeqQGnurjTphoNzh8s',
-  })
-
+  let { sql, promQL } = Greptime({})
   const sqlDemo = async () => {
     try {
-      let res = await sql.select('*').from('keymaster').today('ts').query()
+      let res = await sql.select('*').from('cpu_metrics').query()
       console.log(
         '====================\n',
         res.sql,
@@ -36,29 +30,30 @@ import Greptime from './index'
 
   const getDesc = async (table) => {
     const res = await sql.tableDesc(table)
-    console.log(`res:`, res)
+    console.log(`res111:`, res)
   }
 
   const getTimeIndex = async (table) => {
     const res = await sql.getTimeIndex(table)
-    console.log(`res:`, res)
+    console.log(`res222:`, res)
   }
 
   const createTable = async (name, schema) => {
     const res = await sql.createTable(name, schema)
 
-    console.log(`res:`, res.data.output[0])
+    // console.log(`res:`, res.data.output[0])
   }
 
-  //   createTable('demo', {
-  //     timeIndex: 'ts',
-  //     tags: ['test'],
-  //     fileds: ['data', { startTime: 'date' }],
-  //   })
-  //   getDesc('test2')
-  //   getTimeIndex('test')
-  //   sqlDemo()
-  promQLDemo()
+  // createTable('demo', {
+  //   timeIndex: 'ts',
+  //   tags: ['test'],
+  //   fileds: ['data', { startTime: 'date' }],
+  // })
+  getDesc('cpu_metrics')
+  getTimeIndex('cpu_metrics')
+  // runPromQL()
+  // sqlDemo()
+  // promQLDemo()
 
   //
 })()

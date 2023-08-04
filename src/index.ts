@@ -1,16 +1,10 @@
 import axios from 'axios'
 import SQL from './sql'
 import PromQL from './promql'
-
-interface GreptimeOptions {
-  host: string
-  dbName?: string
-  username?: string
-  password?: string
-}
+import { GreptimeOptions } from './type'
 
 const Greptime = ({
-  host = 'http://localhost:4000',
+  host = 'http://127.0.0.1:4000',
   dbName = 'public',
   username = '',
   password = '',
@@ -21,7 +15,6 @@ const Greptime = ({
   return {
     sql: new SQL(dbName),
     promQL: new PromQL(dbName),
-    grpc: () => {},
   }
 }
 

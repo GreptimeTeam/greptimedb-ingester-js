@@ -1,4 +1,5 @@
 const dayjs = require('dayjs')
+import { formatResult } from '../utils'
 
 const select = {
   select: function (column = '*') {
@@ -55,7 +56,7 @@ const select = {
     let res: any = await this.runSQL(sql)
 
     return {
-      ...this.formatResult(res),
+      ...formatResult(res),
       sql,
     }
   },
@@ -70,7 +71,7 @@ const select = {
 
     let res: any = await this.runSQL(sql)
 
-    return this.formatResult(res, 'one')
+    return formatResult(res, 'one')
   },
 }
 
