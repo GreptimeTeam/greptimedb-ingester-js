@@ -2,7 +2,7 @@ const insert = {
   createTable: async function (name, { tags, fileds, timeIndex }) {
     const sql = `CREATE TABLE IF NOT EXISTS ${name} (
       ${timeIndex} TIMESTAMP TIME INDEX,
-      ${tags.map((tag) => `"${tag}" String,`)}
+      ${tags.map((tag) => `"${tag}" String`)},
       PRIMARY KEY (${tags.join(',\n')}),
       ${fileds
         .map((filed) => {
