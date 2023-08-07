@@ -1,7 +1,7 @@
 const dayjs = require('dayjs')
 import { formatResult } from '../utils'
 
-const select = {
+const read = {
   select: function (column = '*') {
     this.sql.select = column
     return this
@@ -75,4 +75,4 @@ const select = {
   },
 }
 
-export default select
+export default read

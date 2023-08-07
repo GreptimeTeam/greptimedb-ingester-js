@@ -1,4 +1,4 @@
-const insert = {
+const write = {
   createTable: async function (name, { tags, fileds, timeIndex }) {
     const sql = `CREATE TABLE IF NOT EXISTS ${name} (
       ${timeIndex} TIMESTAMP TIME INDEX,
@@ -23,4 +23,4 @@ const insert = {
   },
 }
 
-export default insert
+export default write

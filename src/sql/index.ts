@@ -1,6 +1,6 @@
-import select from './select'
+import read from './read'
 import info from './info'
-import insert from './insert'
+import write from './write'
 
 import axios from 'axios'
 
@@ -23,9 +23,9 @@ function sql(dbName) {
   }
 
   Object.entries({
-    ...select,
+    ...read,
     ...info,
-    ...insert,
+    ...write,
   }).forEach(([key, value]) => {
     this[key] = value
   })
