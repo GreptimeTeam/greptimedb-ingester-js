@@ -22,7 +22,7 @@
     "docs:dev": "vitepress dev doc",
     "docs:build": "vitepress build doc",
     "docs:preview": "vitepress preview doc",
-    "test:mocha": "ts-mocha test/*.spec.ts"
+    "test:mocha": "ts-mocha 'test/**/*.spec.ts' "
   },
   "mocha": {
     "require": [
