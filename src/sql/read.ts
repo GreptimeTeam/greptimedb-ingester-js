@@ -1,7 +1,7 @@
 const dayjs = require('dayjs')
 import { formatResult } from '../utils'
-import { FormatResultState, SQLResData } from '../type/common'
-import { QueryResultState } from '../type/sql'
+import { FormatResultState, QueryResData } from '../type/common'
+import { SqlResultState } from '../type/sql'
 
 const read = {
   select: function (column = '*') {
@@ -47,7 +47,7 @@ const read = {
     return this
   },
 
-  query: async function (): Promise<QueryResultState> {
+  query: async function (): Promise<SqlResultState> {
     const sql = `SELECT ${this.sql.select} 
       FROM ${this.sql.from} 
       ${this.sql.where ? `WHERE ${this.sql.where}` : ''} 
@@ -55,7 +55,7 @@ const read = {
       ${this.sql.orderBy ? `ORDER BY ${this.sql.orderBy}` : ''} 
       ${this.sql.limit ? `LIMIT ${this.sql.limit}` : ''}`.replace(/\s+/g, ' ')
 
-    let res: SQLResData = await this.runSQL(sql)
+    let res: QueryResData = await this.runSQL(sql)
 
     return {
       ...(<FormatResultState>formatResult(res)),
@@ -71,7 +71,7 @@ const read = {
       ${this.sql.orderBy ? `ORDER BY ${this.sql.orderBy}` : ''} 
       ${this.sql.limit ? `LIMIT ${this.sql.limit}` : ''}`.replace(/\s+/g, ' ')
 
-    let res: SQLResData = await this.runSQL(sql)
+    let res: QueryResData = await this.runSQL(sql)
 
     return <number>formatResult(res, 'one')
   },

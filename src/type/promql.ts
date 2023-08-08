@@ -1,8 +1,8 @@
-import { TowsType, SchemaColumnState } from './common'
+import { RowsType, SchemaColumnState } from './common'
 
 export interface PromQLResultState {
   schema: Array<SchemaColumnState>
-  rows: TowsType
+  rows: RowsType
   promQL: PromQLArgs
 }
 

@@ -1,9 +1,9 @@
 import { formatResult } from '../utils'
-import { SQLResData, RecordsState, FormatResultState } from '../type/common'
+import { QueryResData, RecordsState, FormatResultState } from '../type/common'
 
 const info = {
   tableDesc: async function (table: string): Promise<FormatResultState> {
-    let res: SQLResData = await this.runSQL(`DESC TABLE ${table}`)
+    let res: QueryResData = await this.runSQL(`DESC TABLE ${table}`)
 
     return <FormatResultState>formatResult(res)
   },

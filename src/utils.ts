@@ -1,6 +1,6 @@
-import { FormatResultState, SQLResData, ResDataState, FormatResultType } from './type/common'
+import { FormatResultState, QueryResData, ResDataState, FormatResultType } from './type/common'
 
-export const formatResult = function (res: SQLResData, type = 'all'): FormatResultType {
+export const formatResult = function (res: QueryResData, type = 'all'): FormatResultType {
   if (res.data.code) {
     throw new Error(res.data.error) as Error
   }
@@ -9,7 +9,7 @@ export const formatResult = function (res: SQLResData, type = 'all'): FormatResu
     switch (type) {
       case 'all':
         return <FormatResultState>{
-          schema: res.data.output[0].records.schema.column_schemas,
+          schema: res.data.output[0].records.schema && res.data.output[0].records.schema.column_schemas,
           rows: res.data.output[0].records.rows,
         }
       case 'one':

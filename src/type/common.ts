@@ -1,4 +1,4 @@
-export interface SQLResData {
+export interface QueryResData {
   data: ResDataState
 }
 
@@ -16,7 +16,7 @@ export interface OutputState {
 
 export interface RecordsState {
   schema: SchemaState
-  rows: TowsType
+  rows: RowsType
 }
 
 export interface SchemaState {
@@ -29,11 +29,12 @@ export interface SchemaColumnState {
 }
 
 export interface FormatResultState {
-  schema: Array<SchemaColumnState>
-  rows: TowsType
+  // schema may be null when use wrong query to run promQL
+  schema: Array<SchemaColumnState> | null
+  rows: RowsType
 }
 
 export interface createTableState {}
 
-export type TowsType = Array<Array<string | number>>
+export type RowsType = Array<Array<string | number>>
 export type FormatResultType = FormatResultState | ResDataState | number

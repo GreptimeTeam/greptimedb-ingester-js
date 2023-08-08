@@ -1,7 +1,7 @@
-import { SQLResData } from '../type/common'
+import { QueryResData } from '../type/common'
 
 const write = {
-  createTable: async function (name, { tags, fileds, timeIndex }): Promise<SQLResData> {
+  createTable: async function (name, { tags, fileds, timeIndex }): Promise<QueryResData> {
     const sql = `CREATE TABLE IF NOT EXISTS ${name} (
       ${timeIndex} TIMESTAMP TIME INDEX,
       ${tags.map((tag) => `"${tag}" String`)},
@@ -19,7 +19,7 @@ const write = {
         .join(',\n')}
     )`
 
-    let res: SQLResData = await this.runSQL(sql)
+    let res: QueryResData = await this.runSQL(sql)
 
     return res
   },
