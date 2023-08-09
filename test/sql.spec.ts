@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import Greptime from '../src'
+import { SchemaColumnState } from '../src/type/common'
 
 const tableName = 'cpu_metrics'
 const tableSchemaName = ['hostname', 'environment', 'usage_user', 'usage_system', 'usage_idle', 'ts']
@@ -32,7 +33,7 @@ describe('Greptime SQL testing', function () {
 
   it('Schema testing of tableDesc', async function () {
     let { schema } = await sql.tableDesc(tableName)
-    for (let item of schema) {
+    for (let item of schema as SchemaColumnState[]) {
       expect(item.name).to.be.oneOf(tableDescSchemaName)
     }
   })
