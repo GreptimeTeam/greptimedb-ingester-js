@@ -8,7 +8,7 @@ const Greptime = ({
   dbName = 'public',
   username = '',
   password = '',
-}: GreptimeOptions): any => {
+}: GreptimeOptions) => {
   axios.defaults.baseURL = host
   axios.defaults.headers.authorization = `Basic ${btoa(`${username}:${password}`)}`
 
