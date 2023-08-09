@@ -14,7 +14,7 @@ class PromQL {
       query: '',
       start: dayjs().subtract(5, 'm').unix(),
       end: dayjs().unix(),
-      step: 1,
+      step: '1',
       db,
     }
   }
@@ -24,17 +24,17 @@ class PromQL {
     return this
   }
 
-  start = (ts: string) => {
+  start = (ts: number) => {
     this.args.start = dayjs(ts).unix()
     return this
   }
 
-  end = (ts: string) => {
+  end = (ts: number) => {
     this.args.end = dayjs(ts).unix()
     return this
   }
 
-  step = (step: number) => {
+  step = (step: string) => {
     this.args.step = step
     return this
   }

@@ -8,8 +8,8 @@ export interface PromQLResultState {
 
 export interface PromQLArgs {
   query: string
-  start: string
-  end: string
-  step: number
+  start: number
+  end: number
+  step: string
   db: string
 }
