@@ -29,7 +29,7 @@ export interface SchemaColumnState {
 }
 
 export interface FormatResultState {
-  // schema may be null when use wrong query to run promQL
+  // schema may be null when running a function with a wrong arguments
   schema: Array<SchemaColumnState> | null
   rows: RowsType
 }
