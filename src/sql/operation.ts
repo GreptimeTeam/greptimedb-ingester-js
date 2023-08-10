@@ -99,12 +99,12 @@ class SqlOperation {
       ${timeIndex} TIMESTAMP TIME INDEX,
       ${tags.map((tag) => `"${tag}" String`)},
       PRIMARY KEY (${tags.join(',\n')}),
-      ${fileds
-        .map((filed) => {
-          if (typeof filed === 'string') {
-            return `"${filed}" DOUBLE`
+      ${fields
+        .map((field) => {
+          if (typeof field === 'string') {
+            return `"${field}" DOUBLE`
           } else {
-            return Object.entries(filed)
+            return Object.entries(field)
               .map(([key, value]) => `"${key}" ${value}`)
               .join(',\n')
           }

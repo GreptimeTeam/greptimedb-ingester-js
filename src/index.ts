@@ -5,7 +5,7 @@ import { GreptimeOptions } from './type'
 
 const Greptime = ({
   host = 'http://127.0.0.1:4000',
-  dbName = 'public',
+  dbname = 'public',
   username = '',
   password = '',
   sqlConfig = {
@@ -15,7 +15,7 @@ const Greptime = ({
     },
   },
 }: GreptimeOptions) => {
-  axios.defaults.baseURL = host
+  axios.defaults.baseURL = /^https?:\/\//.test(host) ? host : `https://${host}`
   axios.defaults.headers.authorization = `Basic ${btoa(`${username}:${password}`)}`
 
   return {

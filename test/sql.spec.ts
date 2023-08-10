@@ -54,7 +54,7 @@ describe('Greptime SQL testing', function () {
   it('CreateTable testing of sql', async function () {
     let res = await sql.createTable('test1', {
       tags: ['hostname', 'environment'],
-      fileds: ['usage_user', 'usage_system', 'usage_idle'],
+      fields: ['usage_user', 'usage_system', 'usage_idle'],
       timeIndex: 'ts',
     })
     expect(Object.keys(res)[0]).to.be.equal('affectedrows')

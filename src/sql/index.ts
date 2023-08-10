@@ -14,7 +14,7 @@ class Sql extends SqlOperation {
 
   constructor(dbName: string, sqlConfig: SqlConfigState) {
     super()
-    this.url = `/v1/sql?db=${dbName}`
+    this.url = `/v1/sql?db=${dbname}`
     this.sql = {} as SqlState
     this.insertQueueConfig = sqlConfig.insertQueueConfig
     this.insertValues = new Map()
