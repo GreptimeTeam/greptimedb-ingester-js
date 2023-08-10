@@ -9,9 +9,9 @@ class Sql extends SqlOperation {
   url: string
   sql: SqlState
 
-  constructor(dbName: string) {
+  constructor(dbname: string) {
     super()
-    this.url = `/v1/sql?db=${dbName}`
+    this.url = `/v1/sql?db=${dbname}`
     this.sql = {} as SqlState
   }
 

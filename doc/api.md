@@ -46,7 +46,7 @@ try {
 import Greptime from greptime
 let { sql, promQL } = Greptime({
   host = 'http://127.0.0.1:4000',
-  dbName = 'public',
+  dbname = 'public',
   username = '',
   password = '',
 })
