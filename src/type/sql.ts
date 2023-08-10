@@ -18,3 +18,12 @@ export interface SqlState {
   orderBy: string
   limit: string
 }
+
+export interface DeleteState {
+  primary: PrimaryState
+  timestamp: number
+}
+
+export interface PrimaryState {
+  [key: string]: string
+}

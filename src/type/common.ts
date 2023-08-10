@@ -37,4 +37,4 @@ export interface FormatResultState {
 export interface createTableState {}
 
 export type RowsType = Array<Array<string | number>>
-export type FormatResultType = FormatResultState | ResDataState | number
+export type FormatResultType = FormatResultState | ResDataState | OutputState | number

@@ -1,10 +1,11 @@
 const dayjs = require('dayjs')
 import { formatResult } from '../utils'
-import { FormatResultState, QueryResData, RecordsState } from '../type/common'
-import { SqlResultState, SqlInsertValuesState } from '../type/sql'
+import { FormatResultState, OutputState, QueryResData, RecordsState } from '../type/common'
+import { DeleteState, SqlResultState } from '../type/sql'
 import Sql from '.'
 
 class SqlOperation {
+  // Read
   select = function (column = '*'): Sql {
     this.sql.select = column
     return this
@@ -90,7 +91,7 @@ class SqlOperation {
   }
 
   // Write
-  createTable = async function (name, { tags, fileds, timeIndex }): Promise<QueryResData> {
+  createTable = async function (name, { tags, fileds, timeIndex }): Promise<OutputState> {
     const sql = `CREATE TABLE IF NOT EXISTS ${name} (
       ${timeIndex} TIMESTAMP TIME INDEX,
       ${tags.map((tag) => `"${tag}" String`)},
@@ -110,15 +111,30 @@ class SqlOperation {
 
     let res: QueryResData = await this.runSQL(sql)
 
-    return res
+    return <OutputState>formatResult(res, '')
   }
 
-  //TODO insert and delete
-  insert = async function (table: string, values: SqlInsertValuesState) {
-    const sql = `INSERT INTO ${table} VALUES ${values}`
+  insert = async function (table: string, values: Array<Array<number | string>>): Promise<OutputState> {
+    const valuesStr = `${values
+      .map((value) => {
+        return `(${value.map((item) => (typeof item === 'string' ? `"${item}"` : item)).join(',')})`
+      })
+      .join(',\n')};`
+    const sql = `INSERT INTO ${table} VALUES ${valuesStr}`
+    const res = await this.runSQL(sql)
+
+    return <OutputState>formatResult(res, '')
   }
 
-  delete = async function () {}
+  delete = async function (table: string, condition: DeleteState): Promise<OutputState> {
+    const sql = `DELETE FROM ${table} WHERE ${Object.entries(condition.primary)
+      .map(([key, value]) => `${key}='${value}'`)
+      .join(' and ')} and ts=${condition.timestamp};`
+
+    const res = await this.runSQL(sql)
+
+    return <OutputState>formatResult(res, '')
+  }
 }
 
 export default SqlOperation

@@ -1,4 +1,4 @@
-import { FormatResultState, QueryResData, ResDataState, FormatResultType } from './type/common'
+import { FormatResultState, QueryResData, ResDataState, FormatResultType, OutputState } from './type/common'
 
 export const formatResult = function (res: QueryResData, type = 'all'): FormatResultType {
   if (res.data.code) {
@@ -15,7 +15,7 @@ export const formatResult = function (res: QueryResData, type = 'all'): FormatRe
       case 'one':
         return <number>res.data.output[0].records.rows[0][0]
       default:
-        break
+        return <OutputState>res.data.output[0]
     }
   } else {
     return <ResDataState>res.data

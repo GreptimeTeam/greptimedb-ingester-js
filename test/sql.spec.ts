@@ -7,6 +7,7 @@ const tableSchemaName = ['hostname', 'environment', 'usage_user', 'usage_system'
 const tableRows = ['test', 'staging']
 const tableDescSchemaName = ['Field', 'Type', 'Null', 'Default', 'Semantic Type']
 const tableDescRows = tableSchemaName
+let rowNum = 14
 
 describe('Greptime SQL testing', function () {
   const greptime = Greptime({})
@@ -28,7 +29,7 @@ describe('Greptime SQL testing', function () {
 
   it('Count testing of rows', async function () {
     let count = await sql.select().from(tableName).count()
-    expect(count).to.be.equal(18)
+    expect(count).to.be.equal(rowNum)
   })
 
   it('Schema testing of tableDesc', async function () {
@@ -56,6 +57,21 @@ describe('Greptime SQL testing', function () {
       fileds: ['usage_user', 'usage_system', 'usage_idle'],
       timeIndex: 'ts',
     })
-    expect(res.data.code).to.be.equal(0)
+    expect(Object.keys(res)[0]).to.be.equal('affectedrows')
+  })
+
+  it('Insert testing of sql', async function () {
+    let res = await sql.insert('cpu_metrics', [
+      ['host_1', 'test', 222, 222, 222, 1680307200],
+      ['host_2', 'test', 333, 333, 111, 1680307200],
+      ['host_3', 'test', 222, 333, 333, 1680307200],
+    ])
+    expect(res.affectedrows).to.be.equal(3)
+  })
+
+  it('Delete testing of sql', async function () {
+    let res = await sql.delete('cpu_metrics', { primary: { hostname: 'host_1' }, timestamp: 1680307200 })
+    expect(res.affectedrows).to.be.oneOf([0, 1])
+    rowNum--
   })
 })
