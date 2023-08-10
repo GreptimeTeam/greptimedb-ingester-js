@@ -1,6 +1,7 @@
 import { formatResult } from './utils'
 import axios, { AxiosRequestConfig } from 'axios'
-import { PromQLArgs } from './type/promql'
+import { PromQLArgs, PromQLResultState } from './type/promql'
+import { FormatResultState, QueryResData } from './type/common'
 
 const dayjs = require('dayjs')
 class PromQL {
@@ -13,7 +14,7 @@ class PromQL {
       query: '',
       start: dayjs().subtract(5, 'm').unix(),
       end: dayjs().unix(),
-      step: 1,
+      step: '1',
       db,
     }
   }
@@ -23,17 +24,17 @@ class PromQL {
     return this
   }
 
-  start = (ts: string) => {
+  start = (ts: number) => {
     this.args.start = dayjs(ts).unix()
     return this
   }
 
-  end = (ts: string) => {
+  end = (ts: number) => {
     this.args.end = dayjs(ts).unix()
     return this
   }
 
-  step = (step: number) => {
+  step = (step: string) => {
     this.args.step = step
     return this
   }
@@ -47,14 +48,13 @@ class PromQL {
     return this
   }
 
-  run = async () => {
-    // TODO type
-    let res: any = await axios.post(this.url, {}, {
+  run = async (): Promise<PromQLResultState> => {
+    let res: QueryResData = await axios.post(this.url, {}, {
       params: this.args,
     } as AxiosRequestConfig)
 
     return {
-      ...formatResult(res),
+      ...(formatResult(res) as FormatResultState),
       promQL: this.args,
     }
   }

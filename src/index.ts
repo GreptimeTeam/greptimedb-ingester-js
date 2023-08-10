@@ -5,16 +5,16 @@ import { GreptimeOptions } from './type'
 
 const Greptime = ({
   host = 'http://127.0.0.1:4000',
-  dbName = 'public',
+  dbname = 'public',
   username = '',
   password = '',
-}: GreptimeOptions): any => {
-  axios.defaults.baseURL = host
+}: GreptimeOptions) => {
+  axios.defaults.baseURL = /^https?:\/\//.test(host) ? host : `https://${host}`
   axios.defaults.headers.authorization = `Basic ${btoa(`${username}:${password}`)}`
 
   return {
-    sql: new SQL(dbName),
-    promQL: new PromQL(dbName),
+    sql: new SQL(dbname),
+    promQL: new PromQL(dbname),
   }
 }
 
