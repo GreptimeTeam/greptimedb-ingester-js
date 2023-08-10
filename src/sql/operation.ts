@@ -91,17 +91,17 @@ class SqlOperation {
   }
 
   // Write
-  createTable = async function (name, { tags, fileds, timeIndex }): Promise<OutputState> {
+  createTable = async function (name, { tags, fields, timeIndex }): Promise<OutputState> {
     const sql = `CREATE TABLE IF NOT EXISTS ${name} (
       ${timeIndex} TIMESTAMP TIME INDEX,
       ${tags.map((tag) => `"${tag}" String`)},
       PRIMARY KEY (${tags.join(',\n')}),
-      ${fileds
-        .map((filed) => {
-          if (typeof filed === 'string') {
-            return `"${filed}" DOUBLE`
+      ${fields
+        .map((field) => {
+          if (typeof field === 'string') {
+            return `"${field}" DOUBLE`
           } else {
-            return Object.entries(filed)
+            return Object.entries(field)
               .map(([key, value]) => `"${key}" ${value}`)
               .join(',\n')
           }

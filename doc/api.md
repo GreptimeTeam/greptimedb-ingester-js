@@ -63,7 +63,7 @@ The default parameter is to connect to the local client. The default database na
 sql.createTable('demo', {
   timeIndex: 'ts',
   tags: ['test'],
-  fileds: ['data', { startTime: 'date' }],
+  fields: ['data', { startTime: 'date' }],
 })
 ```
 
