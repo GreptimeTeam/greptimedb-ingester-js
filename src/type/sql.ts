@@ -33,4 +33,10 @@ export interface InsertQueueConfigState {
   maxQueueTime: number
 }
 
+export interface CreateTableQueryState {
+  tags: string[]
+  fileds: string[]
+  timeIndex: string
+}
+
 export type SqlInsertValuesState = Array<Array<number | string>>

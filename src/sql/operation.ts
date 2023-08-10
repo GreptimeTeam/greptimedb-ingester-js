@@ -1,7 +1,7 @@
 const dayjs = require('dayjs')
 import { formatResult, getInsertTime } from '../utils'
 import { FormatResultState, OutputState, QueryResData, RecordsState } from '../type/common'
-import { DeleteState, SqlResultState, SqlInsertValuesState } from '../type/sql'
+import { DeleteState, SqlResultState, SqlInsertValuesState, CreateTableQueryState } from '../type/sql'
 import Sql from '.'
 
 class SqlOperation {
@@ -91,7 +91,10 @@ class SqlOperation {
   }
 
   // Write
-  createTable = async function (name, { tags, fileds, timeIndex }): Promise<OutputState> {
+  createTable = async function (
+    name: string,
+    { tags, fileds, timeIndex }: CreateTableQueryState
+  ): Promise<OutputState> {
     const sql = `CREATE TABLE IF NOT EXISTS ${name} (
       ${timeIndex} TIMESTAMP TIME INDEX,
       ${tags.map((tag) => `"${tag}" String`)},
