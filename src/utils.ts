@@ -21,3 +21,10 @@ export const formatResult = function (res: QueryResData, type = 'all'): FormatRe
     return <ResDataState>res.data
   }
 }
+
+export function getInsertTime(maxQueueTime: number) {
+  const nowTimestamp = new Date().getTime()
+  const newTimestamp = nowTimestamp + maxQueueTime
+  const newDate = new Date(newTimestamp)
+  return newDate
+}
