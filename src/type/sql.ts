@@ -35,7 +35,7 @@ export interface InsertQueueConfigState {
 
 export interface CreateTableQueryState {
   tags: string[]
-  fileds: string[]
+  fields: string[]
   timeIndex: string
 }
 

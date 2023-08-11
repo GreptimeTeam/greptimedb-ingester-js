@@ -93,7 +93,7 @@ class SqlOperation {
   // Write
   createTable = async function (
     name: string,
-    { tags, fileds, timeIndex }: CreateTableQueryState
+    { tags, fields, timeIndex }: CreateTableQueryState
   ): Promise<OutputState> {
     const sql = `CREATE TABLE IF NOT EXISTS ${name} (
       ${timeIndex} TIMESTAMP TIME INDEX,
