@@ -19,8 +19,8 @@ const Greptime = ({
   axios.defaults.headers.authorization = `Basic ${btoa(`${username}:${password}`)}`
 
   return {
-    sql: new SQL(dbName, sqlConfig),
-    promQL: new PromQL(dbName),
+    sql: new SQL(dbname, sqlConfig),
+    promQL: new PromQL(dbname),
   }
 }
 
