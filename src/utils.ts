@@ -1,21 +1,23 @@
-export const formatResult = function (res: any, type = 'all') {
+import { FormatResultState, QueryResData, ResDataState, FormatResultType, OutputState } from './type/common'
+
+export const formatResult = function (res: QueryResData, type = 'all'): FormatResultType {
   if (res.data.code) {
-    throw new Error(res.data.error)
+    throw new Error(res.data.error) as Error
   }
 
   if (res.data.output) {
     switch (type) {
       case 'all':
-        return {
-          schema: res.data.output[0].records.schema.column_schemas,
+        return <FormatResultState>{
+          schema: res.data.output[0].records.schema && res.data.output[0].records.schema.column_schemas,
           rows: res.data.output[0].records.rows,
         }
       case 'one':
-        return res.data.output[0].records.rows[0][0]
+        return <number>res.data.output[0].records.rows[0][0]
       default:
-        break
+        return <OutputState>res.data.output[0]
     }
   } else {
-    return res.data
+    return <ResDataState>res.data
   }
 }

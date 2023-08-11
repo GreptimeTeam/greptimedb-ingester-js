@@ -1,6 +1,6 @@
 export interface GreptimeOptions {
   host?: string
-  dbName?: string
+  dbname?: string
   username?: string
   password?: string
 }

@@ -46,7 +46,7 @@ try {
 import Greptime from greptime
 let { sql, promQL } = Greptime({
   host = 'http://127.0.0.1:4000',
-  dbName = 'public',
+  dbname = 'public',
   username = '',
   password = '',
 })
@@ -63,7 +63,7 @@ The default parameter is to connect to the local client. The default database na
 sql.createTable('demo', {
   timeIndex: 'ts',
   tags: ['test'],
-  fileds: ['data', { startTime: 'date' }],
+  fields: ['data', { startTime: 'date' }],
 })
 ```
 
