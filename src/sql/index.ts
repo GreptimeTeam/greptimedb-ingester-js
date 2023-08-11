@@ -12,7 +12,7 @@ class Sql extends SqlOperation {
   insertValues: Map<string, SqlInsertValuesState>
   timeoutId: Map<string, ReturnType<typeof setTimeout>>
 
-  constructor(dbName: string, sqlConfig: SqlConfigState) {
+  constructor(dbname: string, sqlConfig: SqlConfigState) {
     super()
     this.url = `/v1/sql?db=${dbname}`
     this.sql = {} as SqlState
