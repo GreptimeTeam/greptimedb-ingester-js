@@ -8,13 +8,19 @@ const Greptime = ({
   dbname = 'public',
   username = '',
   password = '',
+  sqlConfig = {
+    insertQueueConfig: {
+      maxQueueSize: 100,
+      maxQueueTime: 1000,
+    },
+  },
 }: GreptimeOptions) => {
   axios.defaults.baseURL = /^https?:\/\//.test(host) ? host : `https://${host}`
   axios.defaults.headers.authorization = `Basic ${btoa(`${username}:${password}`)}`
 
   return {
-    sql: new SQL(dbname),
-    promQL: new PromQL(dbname),
+    sql: new SQL(dbName, sqlConfig),
+    promQL: new PromQL(dbName),
   }
 }
 

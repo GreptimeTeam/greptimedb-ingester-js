@@ -6,10 +6,6 @@ export interface SqlResultState {
   sql: string
 }
 
-export interface SqlInsertValuesState {
-  values: Array<{}>
-}
-
 export interface SqlState {
   select: string
   from: string
@@ -27,3 +23,20 @@ export interface DeleteState {
 export interface PrimaryState {
   [key: string]: string
 }
+
+export interface SqlConfigState {
+  insertQueueConfig: InsertQueueConfigState
+}
+
+export interface InsertQueueConfigState {
+  maxQueueSize: number
+  maxQueueTime: number
+}
+
+export interface CreateTableQueryState {
+  tags: string[]
+  fileds: string[]
+  timeIndex: string
+}
+
+export type SqlInsertValuesState = Array<Array<number | string>>

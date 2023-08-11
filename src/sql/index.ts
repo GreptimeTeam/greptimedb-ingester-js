@@ -1,5 +1,5 @@
 import SqlOperation from './operation'
-import { SqlState } from '../type/sql'
+import { SqlState, SqlInsertValuesState, SqlConfigState, InsertQueueConfigState } from '../type/sql'
 
 import axios from 'axios'
 
@@ -8,11 +8,17 @@ const qs = require('qs')
 class Sql extends SqlOperation {
   url: string
   sql: SqlState
+  insertQueueConfig: InsertQueueConfigState
+  insertValues: Map<string, SqlInsertValuesState>
+  timeoutId: Map<string, ReturnType<typeof setTimeout>>
 
-  constructor(dbname: string) {
+  constructor(dbName: string, sqlConfig: SqlConfigState) {
     super()
     this.url = `/v1/sql?db=${dbname}`
     this.sql = {} as SqlState
+    this.insertQueueConfig = sqlConfig.insertQueueConfig
+    this.insertValues = new Map()
+    this.timeoutId = new Map()
   }
 
   runSQL = async function (sql) {
