@@ -1,7 +1,7 @@
 const dayjs = require('dayjs')
-import { formatResult } from '../utils'
+import { formatResult, getInsertTime } from '../utils'
 import { FormatResultState, OutputState, QueryResData, RecordsState } from '../type/common'
-import { DeleteState, SqlResultState } from '../type/sql'
+import { DeleteState, SqlResultState, SqlInsertValuesState, CreateTableQueryState } from '../type/sql'
 import Sql from '.'
 
 class SqlOperation {
@@ -91,7 +91,10 @@ class SqlOperation {
   }
 
   // Write
-  createTable = async function (name, { tags, fields, timeIndex }): Promise<OutputState> {
+  createTable = async function (
+    name: string,
+    { tags, fields, timeIndex }: CreateTableQueryState
+  ): Promise<OutputState> {
     const sql = `CREATE TABLE IF NOT EXISTS ${name} (
       ${timeIndex} TIMESTAMP TIME INDEX,
       ${tags.map((tag) => `"${tag}" String`)},
@@ -114,16 +117,32 @@ class SqlOperation {
     return <OutputState>formatResult(res, '')
   }
 
-  insert = async function (table: string, values: Array<Array<number | string>>): Promise<OutputState> {
-    const valuesStr = `${values
-      .map((value) => {
-        return `(${value.map((item) => (typeof item === 'string' ? `"${item}"` : item)).join(',')})`
-      })
-      .join(',\n')};`
-    const sql = `INSERT INTO ${table} VALUES ${valuesStr}`
-    const res = await this.runSQL(sql)
+  insert = async function (table: string, values: SqlInsertValuesState) {
+    let res: string
+    if (this.insertValues.get(table) && this.insertValues.get(table).length < 100)
+      clearTimeout(this.timeoutId.get(table))
+    this.insertValues.set(table, this.insertValues.get(table) ? this.insertValues.get(table).concat(values) : values)
 
-    return <OutputState>formatResult(res, '')
+    this.timeoutId.set(
+      table,
+      setTimeout(async () => {
+        const valuesStr = `${this.insertValues
+          .get(table)
+          .map((value) => {
+            return `(${value.map((item) => (typeof item === 'string' ? `"${item}"` : item)).join(',')})`
+          })
+          .join(',\n')};`
+        const sql = `INSERT INTO ${table} VALUES ${valuesStr}`
+        await this.runSQL(sql)
+        this.insertValues.set(table, [])
+      }, 1000)
+    )
+    res = `The insert queue has ${
+      this.insertValues && this.insertValues.get(table).length
+    } statements. If no new data is available, the request will be sent at ${getInsertTime(
+      this.insertQueueConfig.maxQueueTime
+    )}`
+    return res
   }
 
   delete = async function (table: string, condition: DeleteState): Promise<OutputState> {
