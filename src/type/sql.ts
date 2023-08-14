@@ -39,4 +39,4 @@ export interface CreateTableQueryState {
   fields: string[]
 }
 
-export type SqlInsertValuesState = Array<Array<number | string>>
+export type SqlInsertValuesState = Array<Array<number | string>> | Array<number | string>
