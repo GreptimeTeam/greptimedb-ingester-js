@@ -34,9 +34,9 @@ export interface InsertQueueConfigState {
 }
 
 export interface CreateTableQueryState {
+  timeIndex: string
   tags: string[]
   fields: string[]
-  timeIndex: string
 }
 
 export type SqlInsertValuesState = Array<Array<number | string>>
