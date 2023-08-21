@@ -14,7 +14,7 @@ class PromQL {
       query: '',
       start: dayjs().subtract(5, 'm').unix(),
       end: dayjs().unix(),
-      step: '1',
+      step: '1s',
       db,
     }
   }
