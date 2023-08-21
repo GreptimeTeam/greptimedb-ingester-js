@@ -63,7 +63,8 @@ The default parameter is to connect to the local client. The default database na
 sql.createTable('demo', {
   timeIndex: 'ts',
   tags: ['test'],
-  fields: ['data', { startTime: 'date' }],
+  // The default type of the data is double, you can use other types like this   {startTime: ''}
+  fields: ['data', { startTime: 'double' }],
 })
 ```
 
@@ -126,6 +127,8 @@ Obtain the query result in the last five minutes
 ```
 let res = await promQL.query('apm').duration('1m').run()
 ```
+
+Note: You cannot use the Int type as a query condition
 
 ### query by time range
 

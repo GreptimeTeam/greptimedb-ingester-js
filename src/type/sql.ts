@@ -34,9 +34,13 @@ export interface InsertQueueConfigState {
 }
 
 export interface CreateTableQueryState {
-  tags: string[]
-  fields: string[]
   timeIndex: string
+  tags: string[]
+  fields: Array<string | FiledItemState>
 }
 
-export type SqlInsertValuesState = Array<Array<number | string>>
+export type SqlInsertValuesState = Array<Array<number | string>> | Array<number | string>
+
+export interface FiledItemState {
+  [key: string]: string
+}
