@@ -93,7 +93,7 @@ class SqlOperation {
   // Write
   createTable = async function (
     name: string,
-    { tags, fields, timeIndex }: CreateTableQueryState
+    { timeIndex, tags, fields }: CreateTableQueryState
   ): Promise<OutputState> {
     const sql = `CREATE TABLE IF NOT EXISTS ${name} (
       ${timeIndex} TIMESTAMP TIME INDEX,
@@ -119,8 +119,10 @@ class SqlOperation {
 
   insert = async function (table: string, values: SqlInsertValuesState) {
     let res: string
+    const isDArray = Array.isArray(values[0])
     if (this.insertValues.get(table) && this.insertValues.get(table).length < 100)
       clearTimeout(this.timeoutId.get(table))
+    values = isDArray ? values : [values as Array<number | string>]
     this.insertValues.set(table, this.insertValues.get(table) ? this.insertValues.get(table).concat(values) : values)
 
     this.timeoutId.set(
