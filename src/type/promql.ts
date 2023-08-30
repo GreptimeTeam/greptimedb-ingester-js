@@ -13,3 +13,10 @@ export interface PromQLArgs {
   step: string
   db: string
 }
+export interface PromQLParams {
+  metrics: string
+  selectors: string[]
+  range: string
+  field: string
+  functions: string[]
+}
