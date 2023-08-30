@@ -15,8 +15,8 @@ export interface PromQLArgs {
 }
 export interface PromQLParams {
   metrics: string
-  selectors: string[]
+  selectors: string | Object
   range: string
   field: string
-  functions: string[]
+  functions: string | string[]
 }

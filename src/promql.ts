@@ -56,13 +56,15 @@ class PromQL {
     return this
   }
 
-  metrics = (metrics: string) => {
-    this.params.metrics = metrics
-    return this
-  }
+  //promQL builder
+  builder = (options: PromQLParams) => {
+    let { metrics, selectors, range, field, functions } = options
+    if (!metrics) {
+      return Promise.reject('wrong promQL query')
+    }
 
-  selectors = (selectors: string | Object) => {
-    this.params.selectors =
+    const functionsArr = Array.isArray(functions) ? functions : [functions]
+    const selectorsArr =
       typeof selectors === 'string'
         ? selectors.split(',')
         : Object.entries(selectors).map(([key, value]) => {
@@ -74,6 +76,7 @@ class PromQL {
                 break
               case '~':
               case '=~':
+              case '~=':
                 operation = '=~'
                 break
               case '!~':
@@ -86,51 +89,31 @@ class PromQL {
             }
             return `${k}${operation}'${value}'`
           })
-    return this
-  }
-  field = (field: string) => {
-    this.params.field = field
-    return this
-  }
 
-  range = (range: string) => {
-    this.params.range = range
-    return this
-  }
+    let query = metrics
 
-  functions = (functions: string | string[]) => {
-    this.params.functions = Array.isArray(functions) ? functions : [functions]
+    if (selectorsArr.length) {
+      if (field) {
+        selectorsArr.push(`__field__='${field}'`)
+      }
+      query += `{${selectorsArr.join()}}`
+    }
+
+    if (range) {
+      query += `[${range}]`
+    }
+
+    if (functionsArr.length) {
+      functionsArr.forEach((fn) => {
+        query = `${fn}(${query})`
+      })
+    }
+
+    this.args.query = query
     return this
   }
 
   run = async (): Promise<PromQLResultState> => {
-    if (!this.args.query) {
-      if (!this.params.metrics) {
-        return Promise.reject('wrong promQL query')
-      }
-
-      let query = this.params.metrics
-
-      if (this.params.selectors.length) {
-        if (this.params.field) {
-          this.params.selectors.push(`__field__='${this.params.field}'`)
-        }
-        query += `{${this.params.selectors.join()}}`
-      }
-
-      if (this.params.range) {
-        query += `[${this.params.range}]`
-      }
-
-      if (this.params.functions.length) {
-        this.params.functions.forEach((fn) => {
-          query = `${fn}(${query})`
-        })
-      }
-      console.log(`query:`, query)
-      this.args.query = query
-    }
-
     let res: QueryResData = await axios.post(this.url, {}, {
       params: this.args,
     } as AxiosRequestConfig)
