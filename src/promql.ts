@@ -1,15 +1,23 @@
 import { formatResult } from './utils'
 import axios, { AxiosRequestConfig } from 'axios'
-import { PromQLArgs, PromQLResultState } from './type/promql'
+import { PromQLArgs, PromQLParams, PromQLResultState } from './type/promql'
 import { FormatResultState, QueryResData } from './type/common'
 
 const dayjs = require('dayjs')
 class PromQL {
   url: string
   args: PromQLArgs
+  params: PromQLParams
 
   constructor(db: string) {
     this.url = '/v1/promql'
+    this.params = {
+      metrics: '',
+      selectors: [],
+      range: '',
+      field: '',
+      functions: [],
+    }
     this.args = {
       query: '',
       start: dayjs().subtract(5, 'm').unix(),
@@ -45,6 +53,64 @@ class PromQL {
     this.args.start = dayjs().subtract(time, unit).unix()
     this.args.end = dayjs().unix()
 
+    return this
+  }
+
+  //promQL builder
+  builder = (options: PromQLParams) => {
+    let { metrics = '', selectors = [], range = '', field = '', functions = [] } = options
+    if (!metrics) {
+      return Promise.reject('metrics is necessary!')
+    }
+
+    const functionsArr = Array.isArray(functions) ? functions : [functions]
+    const selectorsArr =
+      typeof selectors === 'string'
+        ? selectors.split(',')
+        : Object.entries(selectors).map(([key, value]) => {
+            let [_, k, operation] = key.match(/^(.*?)([!~=]*)$/)
+            switch (operation) {
+              case '!':
+              case '!=':
+                operation = '!='
+                break
+              case '~':
+              case '=~':
+              case '~=':
+                operation = '=~'
+                break
+              case '!~':
+                operation = '!~'
+                break
+              case '=':
+              default:
+                operation = '='
+                break
+            }
+            return `${k}${operation}'${value}'`
+          })
+
+    let query = metrics
+
+    if (field) {
+      selectorsArr.push(`__field__='${field}'`)
+    }
+
+    if (selectorsArr.length) {
+      query += `{${selectorsArr.join()}}`
+    }
+
+    if (range) {
+      query += `[${range}]`
+    }
+
+    if (functionsArr.length) {
+      functionsArr.forEach((fn) => {
+        query = `${fn}(${query})`
+      })
+    }
+
+    this.args.query = query
     return this
   }
 
