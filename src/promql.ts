@@ -58,9 +58,9 @@ class PromQL {
 
   //promQL builder
   builder = (options: PromQLParams) => {
-    let { metrics, selectors, range, field, functions } = options
+    let { metrics = '', selectors = [], range = '', field = '', functions = [] } = options
     if (!metrics) {
-      return Promise.reject('wrong promQL query')
+      return Promise.reject('metrics is necessary!')
     }
 
     const functionsArr = Array.isArray(functions) ? functions : [functions]
@@ -92,10 +92,11 @@ class PromQL {
 
     let query = metrics
 
+    if (field) {
+      selectorsArr.push(`__field__='${field}'`)
+    }
+
     if (selectorsArr.length) {
-      if (field) {
-        selectorsArr.push(`__field__='${field}'`)
-      }
       query += `{${selectorsArr.join()}}`
     }
 
