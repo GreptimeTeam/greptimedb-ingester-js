@@ -79,14 +79,20 @@ class SqlOperation {
   }
 
   // Info
-  tableDesc = async function (table: string): Promise<FormatResultState> {
+  showTables = async function (): Promise<FormatResultState> {
+    let res: QueryResData = await this.runSQL(`SHOW TABLES`)
+
+    return <FormatResultState>formatResult(res)
+  }
+
+  descTable = async function (table: string): Promise<FormatResultState> {
     let res: QueryResData = await this.runSQL(`DESC TABLE ${table}`)
 
     return <FormatResultState>formatResult(res)
   }
 
   getTimeIndex = async function (table: string): Promise<number> {
-    let res: RecordsState = await this.tableDesc(table)
+    let res: RecordsState = await this.descTable(table)
     return <number>res.rows.find((row) => row[4] === 'TIME INDEX')[0]
   }
 
