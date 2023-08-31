@@ -5,8 +5,8 @@ import { SchemaColumnState } from '../src/type/common'
 const tableName = 'cpu_metrics'
 const tableSchemaName = ['hostname', 'environment', 'usage_user', 'usage_system', 'usage_idle', 'ts']
 const tableRows = ['test', 'staging']
-const tableDescSchemaName = ['Field', 'Type', 'Null', 'Default', 'Semantic Type']
-const tableDescRows = tableSchemaName
+const descTableSchemaName = ['Field', 'Type', 'Null', 'Default', 'Semantic Type']
+const descTableRows = tableSchemaName
 let rowNum = 15
 
 describe('Greptime SQL testing', function () {
@@ -32,17 +32,17 @@ describe('Greptime SQL testing', function () {
     expect(count).to.be.equal(rowNum)
   })
 
-  it('Schema testing of tableDesc', async function () {
-    let { schema } = await sql.tableDesc(tableName)
+  it('Schema testing of descTable', async function () {
+    let { schema } = await sql.descTable(tableName)
     for (let item of schema as SchemaColumnState[]) {
-      expect(item.name).to.be.oneOf(tableDescSchemaName)
+      expect(item.name).to.be.oneOf(descTableSchemaName)
     }
   })
 
-  it('Rows testing of tableDesc', async function () {
-    let { rows } = await sql.tableDesc(tableName)
+  it('Rows testing of descTable', async function () {
+    let { rows } = await sql.descTable(tableName)
     for (let item of rows) {
-      expect(item[0]).to.be.oneOf(tableDescRows)
+      expect(item[0]).to.be.oneOf(descTableRows)
     }
   })
 

@@ -70,10 +70,10 @@ sql.createTable('demo', {
 
 This function will be converted to a 'CREATE TABLE IF NOT EXISTS' statement
 
-#### tableDesc
+#### descTable
 
 ```js
-sql.tableDesc('demo')
+sql.descTable('demo')
 ```
 
 This function will be converted to a 'DESC TABLE' statement
