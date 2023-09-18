@@ -9,6 +9,7 @@ const Greptime = ({
   username = '',
   password = '',
   sqlConfig = {
+    insertImmediately: false,
     insertQueueConfig: {
       maxQueueSize: 100,
       maxQueueTime: 1000,

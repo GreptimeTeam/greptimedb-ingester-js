@@ -9,6 +9,7 @@ class Sql extends SqlOperation {
   url: string
   sql: SqlState
   insertQueueConfig: InsertQueueConfigState
+  insertImmediately: boolean
   insertValues: Map<string, SqlInsertValuesState>
   timeoutId: Map<string, ReturnType<typeof setTimeout>>
 
@@ -17,6 +18,7 @@ class Sql extends SqlOperation {
     this.url = `/v1/sql?db=${dbname}`
     this.sql = {} as SqlState
     this.insertQueueConfig = sqlConfig.insertQueueConfig
+    this.insertImmediately = sqlConfig.insertImmediately
     this.insertValues = new Map()
     this.timeoutId = new Map()
   }

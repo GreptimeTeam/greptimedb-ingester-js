@@ -1,3 +1,4 @@
+import { InsertQueueConfigState } from './../type/sql'
 const dayjs = require('dayjs')
 import { formatResult, getInsertTime } from '../utils'
 import { FormatResultState, OutputState, QueryResData, RecordsState } from '../type/common'
@@ -99,7 +100,7 @@ class SqlOperation {
   // Write
   createTable = async function (
     name: string,
-    { timeIndex, tags, fields }: CreateTableQueryState
+    { timeIndex = 'ts', tags, fields }: CreateTableQueryState
   ): Promise<OutputState> {
     const sql = `CREATE TABLE IF NOT EXISTS ${name} (
       ${timeIndex} TIMESTAMP TIME INDEX,
@@ -122,29 +123,37 @@ class SqlOperation {
 
     return <OutputState>formatResult(res, '')
   }
+  _insert = async function (table: string): Promise<OutputState> {
+    const valuesStr = `${this.insertValues
+      .get(table)
+      .map((value) => `(${value.map((item) => (typeof item === 'string' ? `"${item}"` : item)).join(',')})`)
+      .join(',\n')};`
+    const sql = `INSERT INTO ${table} VALUES ${valuesStr}`
+    let res = await this.runSQL(sql)
+    this.insertValues.set(table, [])
 
+    return <OutputState>formatResult(res, '')
+  }
   insert = async function (table: string, values: SqlInsertValuesState) {
     let res: string
-    const isDArray = Array.isArray(values[0])
-    if (this.insertValues.get(table) && this.insertValues.get(table).length < 100)
-      clearTimeout(this.timeoutId.get(table))
-    values = isDArray ? values : [values as Array<number | string>]
+    values = Array.isArray(values[0]) ? values : [values as Array<number | string>]
     this.insertValues.set(table, this.insertValues.get(table) ? this.insertValues.get(table).concat(values) : values)
+    if (this.insertImmediately) {
+      const res = await this._insert(table)
+      return res
+    }
+
+    if (this.insertValues.get(table) && this.insertValues.get(table).length < this.insertQueueConfig.maxQueueTime) {
+      clearTimeout(this.timeoutId.get(table))
+    }
 
     this.timeoutId.set(
       table,
       setTimeout(async () => {
-        const valuesStr = `${this.insertValues
-          .get(table)
-          .map((value) => {
-            return `(${value.map((item) => (typeof item === 'string' ? `"${item}"` : item)).join(',')})`
-          })
-          .join(',\n')};`
-        const sql = `INSERT INTO ${table} VALUES ${valuesStr}`
-        await this.runSQL(sql)
-        this.insertValues.set(table, [])
-      }, 1000)
+        await this._insert(table)
+      }, this.insertQueueConfig.maxQueueTime)
     )
+
     res = `The insert queue has ${
       this.insertValues && this.insertValues.get(table).length
     } statements. If no new data is available, the request will be sent at ${getInsertTime(

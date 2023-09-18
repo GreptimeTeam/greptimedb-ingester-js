@@ -25,6 +25,7 @@ export interface PrimaryState {
 }
 
 export interface SqlConfigState {
+  insertImmediately: boolean
   insertQueueConfig: InsertQueueConfigState
 }
 
