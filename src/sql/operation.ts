@@ -49,14 +49,16 @@ class SqlOperation {
     return this
   }
 
-  query = async function (): Promise<SqlResultState> {
-    const sql = `SELECT ${this.sql.select} 
-      FROM ${this.sql.from} 
-      ${this.sql.where ? `WHERE ${this.sql.where}` : ''} 
-      ${this.sql.groupBy ? `GROUP BY ${this.sql.groupBy}` : ''} 
-      ${this.sql.orderBy ? `ORDER BY ${this.sql.orderBy}` : ''} 
-      ${this.sql.limit ? `LIMIT ${this.sql.limit}` : ''}`.replace(/\s+/g, ' ')
-
+  query = async function (sql: string): Promise<SqlResultState> {
+    if (!sql) {
+      sql = `SELECT ${this.sql.select} 
+        FROM ${this.sql.from} 
+        ${this.sql.where ? `WHERE ${this.sql.where}` : ''} 
+        ${this.sql.groupBy ? `GROUP BY ${this.sql.groupBy}` : ''} 
+        ${this.sql.orderBy ? `ORDER BY ${this.sql.orderBy}` : ''} 
+        ${this.sql.limit ? `LIMIT ${this.sql.limit}` : ''}`.replace(/\s+/g, ' ')
+    }
+  
     let res: QueryResData = await this.runSQL(sql)
 
     return {

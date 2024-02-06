@@ -86,14 +86,17 @@ sql.getTimeIndex('demo')
 
 This function return the time index of the current table
 
-#### query(select,from,limit,where,groupBy,orderBy)
+#### query(sql:? string)
 
 ```js
 sql.select('*').from('demo').limit(100).orderBy('ts', 'ASC').query()
+
+sql.query('select * from demo limit 100')
 ```
 
 - Call by chain
 - Finally, you need to call the query method to get the return value
+- You can also immediately run SQL queries
 
 #### count
 
