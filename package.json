@@ -1,6 +1,6 @@
 {
   "name": "greptime",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "SDK for greptimeDB",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.esm.js",
