@@ -1,4 +1,4 @@
-const dayjs = require('dayjs')
+import * as dayjs from 'dayjs'
 import { formatResult, getInsertTime } from '../utils'
 import { FormatResultState, OutputState, QueryResData, RecordsState } from '../type/common'
 import { DeleteState, SqlResultState, SqlInsertValuesState, CreateTableQueryState } from '../type/sql'

@@ -1,9 +1,8 @@
 import SqlOperation from './operation'
 import { SqlState, SqlInsertValuesState, SqlConfigState, InsertQueueConfigState } from '../type/sql'
 
+import qs from 'qs'
 import axios from 'axios'
-
-const qs = require('qs')
 
 class Sql extends SqlOperation {
   url: string

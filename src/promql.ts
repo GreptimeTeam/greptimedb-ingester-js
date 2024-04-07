@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig } from 'axios'
 import { PromQLArgs, PromQLParams, PromQLResultState } from './type/promql'
 import { FormatResultState, QueryResData } from './type/common'
 
-const dayjs = require('dayjs')
+import * as dayjs from 'dayjs'
 class PromQL {
   url: string
   args: PromQLArgs
