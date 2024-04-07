@@ -1,9 +1,11 @@
+import * as _dayjs from 'dayjs'
+import { ManipulateType } from 'dayjs'
 import { formatResult } from './utils'
 import axios, { AxiosRequestConfig } from 'axios'
 import { PromQLArgs, PromQLParams, PromQLResultState } from './type/promql'
 import { FormatResultState, QueryResData } from './type/common'
 
-import * as dayjs from 'dayjs'
+const dayjs = _dayjs
 class PromQL {
   url: string
   args: PromQLArgs
@@ -50,7 +52,9 @@ class PromQL {
   duration = (duration: string = '5m') => {
     const [time, unit] = duration.split(/(?<=\d)(?=[a-zA-Z])/)
 
-    this.args.start = dayjs().subtract(time, unit).unix()
+    this.args.start = dayjs()
+      .subtract(+time, unit as ManipulateType)
+      .unix()
     this.args.end = dayjs().unix()
 
     return this

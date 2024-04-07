@@ -1,9 +1,11 @@
-import * as dayjs from 'dayjs'
+import * as _dayjs from 'dayjs'
+import {ManipulateType} from 'dayjs'
 import { formatResult, getInsertTime } from '../utils'
 import { FormatResultState, OutputState, QueryResData, RecordsState } from '../type/common'
 import { DeleteState, SqlResultState, SqlInsertValuesState, CreateTableQueryState } from '../type/sql'
 import Sql from '.'
 
+const dayjs= _dayjs
 class SqlOperation {
   // Read
   select = function (column = '*'): Sql {
@@ -39,7 +41,7 @@ class SqlOperation {
   duration = function (timeIndex = '', t = '5m'): Sql {
     const [time, unit] = t.split(/(?<=\d)(?=[a-zA-Z])/)
     this.sql.where += `${this.sql.where ? 'AND' : ''} ${timeIndex} > ${dayjs()
-      .subtract(time, unit)
+      .subtract(+time, unit as ManipulateType)
       .valueOf()}000000::Timestamp`
     return this
   }

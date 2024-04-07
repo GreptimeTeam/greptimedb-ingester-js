@@ -1,7 +1,7 @@
 import SqlOperation from './operation'
 import { SqlState, SqlInsertValuesState, SqlConfigState, InsertQueueConfigState } from '../type/sql'
 
-import qs from 'qs'
+import * as qs from 'qs'
 import axios from 'axios'
 
 class Sql extends SqlOperation {
