@@ -5,7 +5,7 @@ import { FormatResultState, OutputState, QueryResData, RecordsState } from '../t
 import { DeleteState, SqlResultState, SqlInsertValuesState, CreateTableQueryState } from '../type/sql'
 import Sql from '.'
 
-const dayjs= _dayjs
+const dayjs = _dayjs
 class SqlOperation {
   // Read
   select = function (column = '*'): Sql {

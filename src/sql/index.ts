@@ -1,9 +1,10 @@
 import SqlOperation from './operation'
 import { SqlState, SqlInsertValuesState, SqlConfigState, InsertQueueConfigState } from '../type/sql'
 
-import * as qs from 'qs'
+import * as _qs from 'qs'
 import axios from 'axios'
 
+const qs = _qs
 class Sql extends SqlOperation {
   url: string
   sql: SqlState
