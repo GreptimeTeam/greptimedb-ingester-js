@@ -1,3 +1,7 @@
+*.d.ts
+!index.d.ts
+.rpt2_cache
+coverage
 node_modules
 dist
-.rpt2_cache
+.nyc_output

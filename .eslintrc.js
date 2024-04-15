@@ -9,8 +9,16 @@ module.exports = {
   parserOptions: {
     sourceType: 'module',
   },
+  plugins: ['@typescript-eslint'],
   rules: {
+    'indent': ['error', 2],
+    'linebreak-style': ['error', 'unix'],
+    'quotes': ['error', 'single'],
+    'no-console': 'off',
+    'max-classes-per-file': ['error', 2],
     '@typescript-eslint/no-unused-vars': 0,
     'no-unused-vars': 0,
   },
 }
+
+

@@ -1,18 +1,19 @@
-import * as _dayjs from 'dayjs'
+import * as dayjs from 'dayjs'
+import * as qs from 'qs'
 import { ManipulateType } from 'dayjs'
 import { formatResult } from './utils'
-import axios, { AxiosRequestConfig } from 'axios'
 import { PromQLArgs, PromQLParams, PromQLResultState } from './type/promql'
-import { FormatResultState, QueryResData } from './type/common'
+import { FormatResultState, fetchConfigType } from './type/common'
 
-const dayjs = _dayjs
 class PromQL {
   url: string
+  authorization: string
   args: PromQLArgs
   params: PromQLParams
 
-  constructor(db: string) {
-    this.url = '/v1/promql'
+  constructor(db: string, fetchConfig: fetchConfigType) {
+    this.url = fetchConfig.baseURL + '/v1/promql?'
+    this.authorization = fetchConfig.authorization
     this.params = {
       metrics: '',
       selectors: [],
@@ -72,27 +73,27 @@ class PromQL {
       typeof selectors === 'string'
         ? selectors.split(',')
         : Object.entries(selectors).map(([key, value]) => {
-            let [_, k, operation] = key.match(/^(.*?)([!~=]*)$/)
-            switch (operation) {
-              case '!':
-              case '!=':
-                operation = '!='
-                break
-              case '~':
-              case '=~':
-              case '~=':
-                operation = '=~'
-                break
-              case '!~':
-                operation = '!~'
-                break
-              case '=':
-              default:
-                operation = '='
-                break
-            }
-            return `${k}${operation}'${value}'`
-          })
+          let [_, k, operation] = key.match(/^(.*?)([!~=]*)$/)
+          switch (operation) {
+          case '!':
+          case '!=':
+            operation = '!='
+            break
+          case '~':
+          case '=~':
+          case '~=':
+            operation = '=~'
+            break
+          case '!~':
+            operation = '!~'
+            break
+          case '=':
+          default:
+            operation = '='
+            break
+          }
+          return `${k}${operation}'${value}'`
+        })
 
     let query = metrics
 
@@ -119,10 +120,15 @@ class PromQL {
   }
 
   run = async (): Promise<PromQLResultState> => {
-    let res: QueryResData = await axios.post(this.url, {}, {
-      params: this.args,
-    } as AxiosRequestConfig)
+    let result = await fetch(this.url + qs.stringify(this.args), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'authorization': this.authorization,
+      },
+    })
 
+    const res = await result.json()
     return {
       ...(formatResult(res) as FormatResultState),
       promQL: this.args,

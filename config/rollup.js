@@ -1,5 +1,4 @@
 var typescript = require('rollup-plugin-typescript2');
-
 var pkg = require('../package.json');
 
 var version = pkg.version;
@@ -15,7 +14,7 @@ var banner =
 
 function getCompiler(opt) {
     opt = opt || {
-        tsconfigOverride: { compilerOptions : { module: 'ES2015' } }
+        tsconfigOverride: { compilerOptions: { module: 'ESNext' } },
     }
 
     return typescript(opt);
@@ -24,3 +23,4 @@ function getCompiler(opt) {
 exports.name = 'greptime-js-sdk';
 exports.banner = banner;
 exports.getCompiler = getCompiler;
+

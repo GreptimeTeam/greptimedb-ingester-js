@@ -1,7 +1,7 @@
 import * as _dayjs from 'dayjs'
 import {ManipulateType} from 'dayjs'
 import { formatResult, getInsertTime } from '../utils'
-import { FormatResultState, OutputState, QueryResData, RecordsState } from '../type/common'
+import { FormatResultState, OutputState, ResDataState, RecordsState } from '../type/common'
 import { DeleteState, SqlResultState, SqlInsertValuesState, CreateTableQueryState } from '../type/sql'
 import Sql from '.'
 
@@ -61,7 +61,7 @@ class SqlOperation {
         ${this.sql.limit ? `LIMIT ${this.sql.limit}` : ''}`.replace(/\s+/g, ' ')
     }
   
-    let res: QueryResData = await this.runSQL(sql)
+    let res: ResDataState = await this.runSQL(sql)
 
     return {
       ...(<FormatResultState>formatResult(res)),
@@ -77,20 +77,20 @@ class SqlOperation {
       ${this.sql.orderBy ? `ORDER BY ${this.sql.orderBy}` : ''} 
       ${this.sql.limit ? `LIMIT ${this.sql.limit}` : ''}`.replace(/\s+/g, ' ')
 
-    let res: QueryResData = await this.runSQL(sql)
+    let res: ResDataState = await this.runSQL(sql)
 
     return <number>formatResult(res, 'one')
   }
 
   // Info
   showTables = async function (): Promise<FormatResultState> {
-    let res: QueryResData = await this.runSQL(`SHOW TABLES`)
+    let res: ResDataState = await this.runSQL(`SHOW TABLES`)
 
     return <FormatResultState>formatResult(res)
   }
 
   descTable = async function (table: string): Promise<FormatResultState> {
-    let res: QueryResData = await this.runSQL(`DESC TABLE ${table}`)
+    let res: ResDataState = await this.runSQL(`DESC TABLE ${table}`)
 
     return <FormatResultState>formatResult(res)
   }
@@ -122,7 +122,7 @@ class SqlOperation {
         .join(',\n')}
     )`
 
-    let res: QueryResData = await this.runSQL(sql)
+    let res: ResDataState = await this.runSQL(sql)
 
     return <OutputState>formatResult(res, '')
   }

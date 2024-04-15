@@ -1,10 +1,6 @@
-export interface QueryResData {
-  data: ResDataState
-}
-
 export interface ResDataState {
   error?: string
-  code: number
+  code?: number
   output?: Array<OutputState>
   execution_time_ms: number
 }
@@ -38,3 +34,8 @@ export interface createTableState {}
 
 export type RowsType = Array<Array<string | number>>
 export type FormatResultType = FormatResultState | ResDataState | OutputState | number
+
+export type fetchConfigType = {
+  authorization: string
+  baseURL: string
+}
