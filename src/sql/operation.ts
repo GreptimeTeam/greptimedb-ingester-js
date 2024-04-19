@@ -110,16 +110,16 @@ class SqlOperation {
       ${tags.map((tag) => `"${tag}" String`)},
       PRIMARY KEY (${tags.join(',\n')}),
       ${fields
-        .map((field) => {
-          if (typeof field === 'string') {
-            return `"${field}" DOUBLE`
-          } else {
-            return Object.entries(field)
-              .map(([key, value]) => `"${key}" ${value}`)
-              .join(',\n')
-          }
-        })
-        .join(',\n')}
+      .map((field) => {
+        if (typeof field === 'string') {
+          return `"${field}" DOUBLE`
+        } else {
+          return Object.entries(field)
+            .map(([key, value]) => `"${key}" ${value}`)
+            .join(',\n')
+        }
+      })
+      .join(',\n')}
     )`
 
     let res: ResDataState = await this.runSQL(sql)
@@ -130,25 +130,34 @@ class SqlOperation {
   insert = async function (table: string, values: SqlInsertValuesState) {
     let res: string
     const isDArray = Array.isArray(values[0])
-    if (this.insertValues.get(table) && this.insertValues.get(table).length < 100)
+    if (this.insertValues.get(table) && this.insertValues.get(table).length < this.insertQueueConfig.maxQueueSize)
       clearTimeout(this.timeoutId.get(table))
     values = isDArray ? values : [values as Array<number | string>]
     this.insertValues.set(table, this.insertValues.get(table) ? this.insertValues.get(table).concat(values) : values)
 
-    this.timeoutId.set(
-      table,
-      setTimeout(async () => {
-        const valuesStr = `${this.insertValues
-          .get(table)
-          .map((value) => {
-            return `(${value.map((item) => (typeof item === 'string' ? `"${item}"` : item)).join(',')})`
-          })
-          .join(',\n')};`
-        const sql = `INSERT INTO ${table} VALUES ${valuesStr}`
-        await this.runSQL(sql)
-        this.insertValues.set(table, [])
-      }, 1000)
-    )
+    async function fetchInsert() {
+      const valuesStr = `${this.insertValues
+        .get(table)
+        .map((value) => {
+          return `(${value.map((item) => (typeof item === 'string' ? `"${item}"` : item)).join(',')})`
+        })
+        .join(',\n')};`
+      const sql = `INSERT INTO ${table} VALUES ${valuesStr}`
+      await this.runSQL(sql)
+      this.insertValues.set(table, [])
+    }
+
+    if (!this.insertQueueConfig.maxQueueTime) {
+      await fetchInsert()
+    } else {
+      this.timeoutId.set(
+        table,
+        setTimeout(async () => {
+          await fetchInsert()
+        }, this.insertQueueConfig.maxQueueTime)
+      )
+    }
+
     res = `The insert queue has ${
       this.insertValues && this.insertValues.get(table).length
     } statements. If no new data is available, the request will be sent at ${getInsertTime(

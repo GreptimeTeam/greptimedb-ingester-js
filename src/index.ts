@@ -10,7 +10,7 @@ const Greptime = ({
   sqlConfig = {
     insertQueueConfig: {
       maxQueueSize: 100,
-      maxQueueTime: 1000,
+      maxQueueTime: 0,
     },
   },
 }: GreptimeOptions): { sql: SQL; promQL: PromQL } => {

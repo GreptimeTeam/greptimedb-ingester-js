@@ -1,5 +1,5 @@
 import * as dayjs from 'dayjs'
-import * as qs from 'qs'
+import { stringify } from 'qs'
 import { ManipulateType } from 'dayjs'
 import { formatResult } from './utils'
 import { PromQLArgs, PromQLParams, PromQLResultState } from './type/promql'
@@ -120,7 +120,7 @@ class PromQL {
   }
 
   run = async (): Promise<PromQLResultState> => {
-    let result = await fetch(this.url + qs.stringify(this.args), {
+    let result = await fetch(this.url + stringify(this.args), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
