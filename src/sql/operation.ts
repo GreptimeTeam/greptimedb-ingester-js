@@ -1,5 +1,5 @@
 import * as _dayjs from 'dayjs'
-import {ManipulateType} from 'dayjs'
+import { ManipulateType } from 'dayjs'
 import { formatResult, getInsertTime } from '../utils'
 import { FormatResultState, OutputState, ResDataState, RecordsState } from '../type/common'
 import { DeleteState, SqlResultState, SqlInsertValuesState, CreateTableQueryState } from '../type/sql'
@@ -51,7 +51,7 @@ class SqlOperation {
     return this
   }
 
-  query = async function (sql: string): Promise<SqlResultState> {
+  query = async function (sql?: string): Promise<SqlResultState> {
     if (!sql) {
       sql = `SELECT ${this.sql.select} 
         FROM ${this.sql.from} 
@@ -60,7 +60,7 @@ class SqlOperation {
         ${this.sql.orderBy ? `ORDER BY ${this.sql.orderBy}` : ''} 
         ${this.sql.limit ? `LIMIT ${this.sql.limit}` : ''}`.replace(/\s+/g, ' ')
     }
-  
+
     let res: ResDataState = await this.runSQL(sql)
 
     return {
@@ -84,7 +84,7 @@ class SqlOperation {
 
   // Info
   showTables = async function (): Promise<FormatResultState> {
-    let res: ResDataState = await this.runSQL(`SHOW TABLES`)
+    let res: ResDataState = await this.runSQL('SHOW TABLES')
 
     return <FormatResultState>formatResult(res)
   }
@@ -97,7 +97,7 @@ class SqlOperation {
 
   getTimeIndex = async function (table: string): Promise<number> {
     let res: RecordsState = await this.descTable(table)
-    return <number>res.rows.find((row) => row[4] === 'TIME INDEX')[0]
+    return <number>res.rows.find((row) => row.indexOf('TIMESTAMP') !== -1)[0]
   }
 
   // Write
@@ -135,7 +135,7 @@ class SqlOperation {
     values = isDArray ? values : [values as Array<number | string>]
     this.insertValues.set(table, this.insertValues.get(table) ? this.insertValues.get(table).concat(values) : values)
 
-    async function fetchInsert() {
+    const fetchInsert = async () => {
       const valuesStr = `${this.insertValues
         .get(table)
         .map((value) => {
