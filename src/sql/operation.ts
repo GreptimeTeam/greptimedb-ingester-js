@@ -100,21 +100,6 @@ class SqlOperation {
     return <number>res.rows.find((row) => row.indexOf('TIMESTAMP') !== -1)[0]
   }
 
-  createCpuMetricsTable = async function (): Promise<OutputState> {
-    const sql = `CREATE TABLE IF NOT EXISTS cpu_metrics (
-      ts TIMESTAMP TIME INDEX,
-      hostname String,
-      environment String,
-      usage_user Double,
-      usage_system Double,
-      usage_idle Double,
-      PRIMARY KEY (hostname, environment)
-    )`
-
-    let res: ResDataState = await this.runSQL(sql)
-    return <OutputState>formatResult(res, '')
-  }
-
   // Write
   createTable = async function (
     name: string,

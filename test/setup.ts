@@ -1,11 +1,28 @@
 import Greptime from '../src'
+import { OutputState, ResDataState } from '../src/type/common'
+import { formatResult } from '../src/utils'
+
+async function createCpuMetricsTable(sql: any): Promise<OutputState> {
+  const createTableSql = `CREATE TABLE IF NOT EXISTS cpu_metrics (
+    ts TIMESTAMP TIME INDEX,
+    hostname String,
+    environment String,
+    usage_user Double,
+    usage_system Double,
+    usage_idle Double,
+    PRIMARY KEY (hostname, environment)
+  )`
+
+  let res: ResDataState = await sql.runSQL(createTableSql)
+  return <OutputState>formatResult(res, '')
+}
 
 async function setup() {
   const greptime = Greptime({})
   const sql = greptime.sql
 
   // Create cpu_metrics table if not exists
-  await sql.createCpuMetricsTable()
+  await createCpuMetricsTable(sql)
 
   // Insert initial test data
   await sql.insert('cpu_metrics', [

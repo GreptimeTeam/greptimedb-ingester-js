@@ -70,8 +70,4 @@ describe('Greptime SQL testing', function () {
     rowNum--
   })
 
-  it('CreateCpuMetricsTable testing of sql', async function () {
-    let res = await sql.createCpuMetricsTable()
-    expect(res.affectedrows).to.be.oneOf([0, 1])
-  })
 })
